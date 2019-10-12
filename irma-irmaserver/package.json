@@ -1,0 +1,13 @@
+{
+  "name": "irma-irmaserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsonwebtoken": "^8.4.0",
+    "eventsource": "^1.0.7",
+    "isomorphic-fetch": "^2.2.1"
+  }
+}
