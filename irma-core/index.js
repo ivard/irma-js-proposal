@@ -8,7 +8,7 @@ module.exports = class IrmaCore {
     this._options = options || {};
     this._options.userAgent = userAgent();
 
-    this._stateMachine = new StateMachine();
+    this._stateMachine = new StateMachine(this._options);
     this._stateMachine.addStateChangeListener((s) => this._stateChangeListener(s));
   }
 

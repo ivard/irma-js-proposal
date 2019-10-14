@@ -2,8 +2,9 @@ const transitions = require('./state-transitions');
 
 module.exports = class StateMachine {
 
-  constructor() {
+  constructor(options) {
     this._state     = transitions.startState;
+    this._debugging = options.debugging;
     this._listeners = [];
   }
 
@@ -14,6 +15,9 @@ module.exports = class StateMachine {
   transition(transition, payload) {
     const oldState = this._state;
     this._state    = this._getNewState(transition);
+
+    if ( this._debugging )
+      console.debug(`🎰 State change: '${oldState}' → '${this._state}' (because of '${transition}')`);
 
     this._listeners.forEach(func => func({
       newState:   this._state,
