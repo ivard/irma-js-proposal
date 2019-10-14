@@ -49,14 +49,16 @@ irma.use(IrmaServer);
 irma.use(Console);
 ```
 
-IrmaCore holds the state machine and some helper logic. IrmaServer is a plugin
-that knows how to communicate with IRMA server (basically half of `irmajs`).
-Console is a plugin that provides a user interface on the console. When the
-state machine is started, each plugin gets state change updates, can do its work
-and/or move the machine to the next state.
+`irma-core` holds the state machine and some helper logic. `irma-irmaserver` is
+a plugin that knows how to communicate with IRMA server (basically half of
+`irmajs`). `irma-console` is a plugin that provides a user interface on the
+console.
 
-Starting the disclosure flow is the same as it was in `irma-web-glue` (and
-almost the same as it was in `irmajs`):
+When the state machine is started, each plugin gets state change updates, can do
+its work and/or move the machine to the next state.
+
+Starting the disclosure flow is the same as it is in `irma-web-glue` (and
+almost the same as it is in `irmajs`):
 
 ```javascript
 irma.start('http://localhost:8088', {
@@ -71,10 +73,15 @@ irma.start('http://localhost:8088', {
 .catch(error => console.error("Couldn't do what you asked 😢", error));
 ```
 
-Don't want console output, but a proper interface in the browser? Use a
-different package. Don't want to use the IRMA server, but a Nuts node with built
-in IRMA server? Use a different package. Want to do something completely
-different? Write your own plugin, which can be as powerful as any other.
+Don't want console output, but a proper UI in the browser? Use the `irma-web`
+package, or the `irma-popup` package that's underway, that packages the other
+half of `irmajs`.
+
+Don't want to use the IRMA server, but a Nuts node with built in IRMA server?
+Use the `irma-nuts-auth` package instead.
+
+Want to do something completely different? Write your own plugin, which can be
+as powerful as any other 🌈
 
 ## Examples
 
@@ -148,10 +155,18 @@ discuss the concepts in this proposal. Specifically:
 
 * Do you guys agree that it's a good idea to have many small packages instead of
 one (or two) big one(s)?
-* If so, do we want to have those packages in the privacybydesign Github org, in
-the nuts-foundation Github org, or spread over the two?
-* Do you like the concept of having multiple plugins subscribing to a state
-machine?
-* Do you like the API IrmaCore exposes to the developer?
+* If so, where should these packages live? I would guess in separate Github
+repositories. Do we want to have those repositories in the privacybydesign
+Github org, in the nuts-foundation Github org, or spread over the two? I think
+I'd be in favour of the latter, but keep a list somewhere on the IRMA website of
+known available plugins.
+* Do you agree with the concept of having multiple plugins subscribing to a
+state machine?
+* Do you agree with the API `irma-core` exposes to the developer?
 * Do we still want to have a "legacy" `irmajs` package? That could just
-'webpack' a couple of these plugins, I guess.
+'webpack' a couple of these plugins, I guess. Or we could just deprecate that
+one (and `irma-web-glue`) and encourage people to move to the new version..?
+
+If we can find agreement on these things, I don't mind putting some more time
+in, and bringing this to a first stable version. I'll definitely need your help
+in testing and bugfixing everything though.
