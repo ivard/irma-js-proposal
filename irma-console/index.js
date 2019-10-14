@@ -8,8 +8,6 @@ module.exports = class IrmaConsole {
   }
 
   stateChange({newState, oldState, transition, payload}) {
-    console.info(`🎰 State change: '${oldState}' → '${newState}' (because of '${transition}')`);
-
     switch(newState) {
       case 'Cancelled':
         return this._askRetry('Transaction cancelled.');
@@ -31,10 +29,13 @@ module.exports = class IrmaConsole {
     .catch(e => console.error(e));
   }
 
+  // Works like a charm in a terminal with nodejs.
+  // Unfortunately it doesn't render a QR code in the browser console. It
+  // outputs SVG instead. Should work™️ according to the manual though :/
+  // https://www.npmjs.com/package/qrcode#tostringtext-options-cberror-string
   _renderQRcode(payload) {
-    QRCode.toString(JSON.stringify(payload), { type: 'terminal' }, (_, qrcode) => {
-      console.log(qrcode);
-    });
+    QRCode.toString(JSON.stringify(payload), { type: 'terminal' })
+    .then(qrcode => console.log(qrcode));
   }
 
 }
