@@ -1,11 +1,11 @@
-const IrmaCore       = require('irma-core');
-const IrmaConsole    = require('irma-console');
-const IrmaIrmaServer = require('irma-irmaserver');
+const IrmaCore   = require('irma-core');
+const Console    = require('irma-console');
+const IrmaServer = require('irma-irmaserver');
 
 const irma = new IrmaCore();
 
-irma.use(IrmaConsole);
-irma.use(IrmaIrmaServer);
+irma.use(Console);
+irma.use(IrmaServer);
 
 irma.start('http://localhost:8088', {
   "@context": "https://irma.app/ld/request/disclosure/v2",
@@ -18,4 +18,8 @@ irma.start('http://localhost:8088', {
 .then(result => {
   console.log("Successful disclosure! 🎉");
   console.log(result)
+})
+.catch(error => {
+  console.log("Couldn't do what you asked 😢");
+  console.log(error);
 });
