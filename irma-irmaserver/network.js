@@ -8,11 +8,12 @@ module.exports = {
   fetchCheck
 }
 
-function waitStatus(url, status = SessionStatus.Initialized) {
+function waitStatus(url, status = SessionStatus.Initialized, debugging) {
   return new Promise((resolve, reject) => {
     const EvtSource = browser ? window.EventSource : EventSource;
     if (!EvtSource) {
-      console.info('No support for EventSource, fallback to polling');
+      if ( debugging )
+        console.info('No support for EventSource, fallback to polling');
       poller(`${url}/status`, status, resolve, reject);
       return;
     }
@@ -32,12 +33,14 @@ function waitStatus(url, status = SessionStatus.Initialized) {
     };
     source.onerror = e => {
       clearTimeout(canceller);
-      console.error('Received server event error', e);
+      if ( debugging )
+        console.error('Received server event error', e);
       source.close();
       reject(e);
     };
   }).catch((e) => {
-    console.error('error in server sent event, falling back to polling:', e);
+    if ( debugging )
+      console.error('error in server sent event, falling back to polling:', e);
     return pollStatus(`${url}/status`, status);
   });
 }

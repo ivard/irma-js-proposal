@@ -11,9 +11,10 @@ const SessionStatus = {
 
 module.exports = class IrmaServer {
 
-  constructor(server) {
-    this._server  = server;
-    this._session = {};
+  constructor(server, debugging) {
+    this._server    = server;
+    this._debugging = debugging;
+    this._session   = {};
   }
 
   startSession(request) {
@@ -103,7 +104,8 @@ module.exports = class IrmaServer {
     return Promise.resolve()
       // 1st phase: session started, phone not yet connected
       .then(() => {
-        console.log('Session started', state.qr);
+        if ( this._debugging )
+          console.log('Session started', state.qr);
         // state.options = processOptions(options);
         // TODO: this was a quick-fix
         state.options = options;
@@ -152,7 +154,8 @@ module.exports = class IrmaServer {
       .then(() => {
         if (state.done) return status;
 
-        console.log('Session state changed', status, state.qr.u);
+        if ( this._debugging )
+          console.log('Session state changed', status, state.qr.u);
         // switch (state.method) {
         //   case 'popup':
         //     translatePopupElement('irma-text', 'Messages.FollowInstructions', state.options.language);
@@ -182,7 +185,8 @@ module.exports = class IrmaServer {
 
         const jwtType = state.options.legacyResultJwt ? 'getproof' : 'result-jwt';
         const endpoint = state.options.resultJwt || state.options.legacyResultJwt ? jwtType : 'result';
-        console.log("Requesting: ", `${state.options.server}/session/${state.options.token}/${ endpoint }`);
+        if ( this._debugging )
+          console.log("Requesting: ", `${state.options.server}/session/${state.options.token}/${ endpoint }`);
         return network.fetchCheck(`${state.options.server}/session/${state.options.token}/${ endpoint }`);
       })
 
@@ -206,7 +210,7 @@ module.exports = class IrmaServer {
    * @param {string} url
    */
   _waitConnected(url) {
-    return network.waitStatus(url, SessionStatus.Initialized)
+    return network.waitStatus(url, SessionStatus.Initialized, this._debugging)
       .then((status) => {
         if (status !== SessionStatus.Connected && status !== SessionStatus.Done)
           return Promise.reject(status);
@@ -220,7 +224,7 @@ module.exports = class IrmaServer {
    * @param {string} url
    */
   _waitDone(url) {
-    return network.waitStatus(url, SessionStatus.Connected)
+    return network.waitStatus(url, SessionStatus.Connected, this._debugging)
       .then((status) => {
         if (status !== SessionStatus.Done)
           return Promise.reject(status);

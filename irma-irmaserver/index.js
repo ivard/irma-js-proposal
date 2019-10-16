@@ -25,7 +25,7 @@ module.exports = class IrmaJSBackend {
       request: request
     });
 
-    this._irmaServer = new IrmaServer(server);
+    this._irmaServer = new IrmaServer(server, this._options.debugging);
     this._stateMachine.transition('initialize');
   }
 
