@@ -2,9 +2,9 @@ const transitions = require('./state-transitions');
 
 module.exports = class StateMachine {
 
-  constructor(options) {
+  constructor(debugging) {
     this._state     = transitions.startState;
-    this._debugging = options.debugging;
+    this._debugging = debugging;
     this._listeners = [];
   }
 
