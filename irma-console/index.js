@@ -7,7 +7,7 @@ module.exports = class IrmaConsole {
     this._stateMachine = stateMachine;
   }
 
-  stateChange({newState, oldState, transition, payload}) {
+  stateChange({newState, payload}) {
     switch(newState) {
       case 'Cancelled':
         return this._askRetry('Transaction cancelled.');
