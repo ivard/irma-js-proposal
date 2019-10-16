@@ -61,7 +61,7 @@ module.exports = [
 		module: sharedModule,
 
 		output: {
-			chunkFilename: 'irma-development.js',
+			chunkFilename: '[name].js',
 			filename: 'irma-development.js'
 		},
 
