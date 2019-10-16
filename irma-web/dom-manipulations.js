@@ -1,9 +1,10 @@
 module.exports = class DOMManipulations {
 
-  constructor(element, translations) {
-    this._element      = element;
-    this._translations = translations;
-    this._showHelper   = false;
+  constructor(element, translations, clickCallback) {
+    this._element       = element;
+    this._translations  = translations;
+    this._showHelper    = false;
+    this._clickCallback = clickCallback;
 
     this._renderInitialState();
     this._attachClickHandler();
@@ -29,7 +30,7 @@ module.exports = class DOMManipulations {
 
     this._element.addEventListener('click', (e) => {
       if (e.target.matches('[data-irma-glue-transition]')) {
-        this._stateMachine.transition(e.target.getAttribute('data-irma-glue-transition'));
+        this._clickCallback(e.target.getAttribute('data-irma-glue-transition'));
       }
     });
   }
