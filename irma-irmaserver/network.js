@@ -34,13 +34,13 @@ function waitStatus(url, status = SessionStatus.Initialized, debugging) {
     source.onerror = e => {
       clearTimeout(canceller);
       if ( debugging )
-        console.error('Received server event error', e);
+        console.warn('Received server event error', e);
       source.close();
       reject(e);
     };
   }).catch((e) => {
     if ( debugging )
-      console.error('error in server sent event, falling back to polling:', e);
+      console.warn('error in server sent event, falling back to polling:', e);
     return pollStatus(`${url}/status`, status);
   });
 }
