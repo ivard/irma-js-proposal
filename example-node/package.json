@@ -5,14 +5,16 @@
   "main": "index.js",
   "scripts": {
     "nuts-auth": "node nuts-auth.js",
-    "irma-server": "node irma-server.js"
+    "irma-server": "node irma-server.js",
+    "dummy": "node dummy.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "irma-core": "../irma-core",
     "irma-console": "../irma-console",
-    "irma-nuts-auth": "../irma-nuts-auth",
-    "irma-irmaserver": "../irma-irmaserver"
+    "irma-core": "../irma-core",
+    "irma-dummy": "../irma-dummy",
+    "irma-irmaserver": "../irma-irmaserver",
+    "irma-nuts-auth": "../irma-nuts-auth"
   }
 }
