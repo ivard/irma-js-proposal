@@ -74,10 +74,6 @@ module.exports = [
 		devServer: {
 			contentBase: [path.join(__dirname, 'docs'), path.join(__dirname, 'dist')],
 			disableHostCheck: true
-		},
-
-		externals: {
-			'readline': 'readline'
 		}
 	},
 
@@ -102,11 +98,6 @@ module.exports = [
 
 			minimize: true,
 	    minimizer: [new TerserPlugin()]
-		},
-
-		externals: {
-			'readline': 'readline'
 		}
-
 	}
 ];
