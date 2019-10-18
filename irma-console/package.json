@@ -2,10 +2,12 @@
   "name": "irma-console",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "node.js",
+  "browser": "web.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "prompt-sync": "^4.1.7",
     "qrcode": "^1.4.2"
   }
 }
