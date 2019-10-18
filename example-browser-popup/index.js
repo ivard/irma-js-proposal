@@ -9,8 +9,7 @@ const Dummy      = require('irma-dummy');
 document.getElementById('start-button').addEventListener('click', () => {
 
   const irma = new IrmaCore({
-    debugging: true,
-    element:   '#irma-web-form'
+    debugging: true
   });
 
   irma.use(Popup);
