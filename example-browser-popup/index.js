@@ -1,7 +1,10 @@
 const IrmaCore = require('irma-core');
 const Popup    = require('irma-popup');
-// const IrmaServer  = require('irma-irmaserver');
 const NutsAuth = require('irma-nuts-auth');
+
+// Other options for "back-ends":
+const IrmaServer = require('irma-irmaserver');
+const Dummy      = require('irma-dummy');
 
 document.getElementById('start-button').addEventListener('click', () => {
 

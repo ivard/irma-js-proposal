@@ -1,6 +1,10 @@
-const IrmaCore     = require('irma-core');
-const IrmaWeb      = require('irma-web');
+const IrmaCore   = require('irma-core');
+const IrmaWeb    = require('irma-web');
 const IrmaServer = require('irma-irmaserver');
+
+// Other options for "back-ends":
+const NutsAuth   = require('irma-nuts-auth');
+const Dummy      = require('irma-dummy');
 
 const irma = new IrmaCore({
   debugging: true,
@@ -10,7 +14,7 @@ const irma = new IrmaCore({
 irma.use(IrmaWeb);
 irma.use(IrmaServer);
 
-irma.start('http://localhost:8088', {
+irma.start('http://2c0a0532.ngrok.io', {
   "@context": "https://irma.app/ld/request/disclosure/v2",
   "disclose": [
     [
