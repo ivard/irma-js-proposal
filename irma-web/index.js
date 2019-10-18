@@ -6,15 +6,17 @@ module.exports = class IrmaWeb {
   constructor({stateMachine, options}) {
     this._stateMachine = stateMachine;
     this._options      = this._sanitizeOptions(options);
+    this._lastPayload  = null;
 
     this._dom = new DOMManipulations(
       document.querySelector(this._options.element),
       this._options.translations,
-      (t) => this._stateMachine.transition(t)
+      (t) => this._stateMachine.transition(t, this._lastPayload)
     );
   }
 
   stateChange({newState, payload}) {
+    this._lastPayload = payload;
     switch(newState) {
       case 'ContinueInIrmaApp':
         return window.setTimeout(() => this._dom.renderState(newState), 200);
