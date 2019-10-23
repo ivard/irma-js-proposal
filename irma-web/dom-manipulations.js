@@ -134,6 +134,7 @@ module.exports = class DOMManipulations {
   _stateCancelled() {
     return `
       <!-- State: Cancelled -->
+      <div class="irma-web-forbidden-animation"></div>
       <p>${this._translations.cancelled}</p>
       <p><a data-irma-glue-transition="restart">${this._translations.retry}</a></p>
     `;
@@ -142,6 +143,7 @@ module.exports = class DOMManipulations {
   _stateTimedOut() {
     return `
       <!-- State: TimedOut -->
+      <div class="irma-web-clock-animation"></div>
       <p>${this._translations.timeout}</p>
       <p><a data-irma-glue-transition="restart">${this._translations.retry}</a></p>
     `;
@@ -150,6 +152,7 @@ module.exports = class DOMManipulations {
   _stateError() {
     return `
       <!-- State: Error -->
+      <div class="irma-web-forbidden-animation"></div>
       <p>${this._translations.error}</p>
       <p><a data-irma-glue-transition="restart">${this._translations.retry}</a></p>
     `;
@@ -157,7 +160,8 @@ module.exports = class DOMManipulations {
 
   _stateBrowserNotSupported() {
     return `
-      <!-- State: Error -->
+      <!-- State: BrowserNotSupported -->
+      <div class="irma-web-forbidden-animation"></div>
       <p>${this._translations.browser}</p>
     `;
   }
@@ -169,6 +173,5 @@ module.exports = class DOMManipulations {
       <p>${this._translations.success}</p>
     `;
   }
-
 
 };
