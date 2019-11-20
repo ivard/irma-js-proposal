@@ -8,8 +8,7 @@
 
 module.exports = {
 
-  startState: 'Uninitialized',
-  endState:   'Success',
+  startState:       'Uninitialized',
 
   Uninitialized: {
     initialize:     'Loading',
@@ -74,6 +73,7 @@ module.exports = {
     restart:        'Loading'
   },
 
+  // End states
   BrowserNotSupported: {},
   Success: {}
 
