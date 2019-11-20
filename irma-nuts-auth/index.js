@@ -19,14 +19,23 @@ module.exports = class IrmaNutsAuth {
     };
   }
 
-  start(server, request) {
+  start(session) {
     Object.assign(this._options, {
-      server: server,
-      request: request
+      session: session
     });
 
-    this._nutsServer = new NutsServer(server);
-    this._stateMachine.transition('initialize');
+    // If given a session, continue that session
+    if ( this._options.session ) {
+      this._stateMachine.transition('loaded', this._options.session.qr_code_info);
+      return;
+    }
+
+    // If given a server and a request, start a new session
+    if ( this._options.server && this._options.request ) {
+      this._nutsServer = new NutsServer(this._options.server);
+      this._stateMachine.transition('initialize');
+      return;
+    }
   }
 
   _startNewSession() {
