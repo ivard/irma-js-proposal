@@ -11,7 +11,8 @@ module.exports = {
   startState:       'Uninitialized',
 
   Uninitialized: {
-    initialize:     'Loading',
+    initialize:     'Loading',             // Start a new session
+    loaded:         'MediumContemplation', // Handle an existing session
     browserError:   'BrowserNotSupported',
     fail:           'Error'
   },

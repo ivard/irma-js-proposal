@@ -26,6 +26,10 @@ module.exports = class NutsServer {
     });
   }
 
+  handleSession(session) {
+    this._session = session;
+  }
+
   pollUntil(targetState) {
     return new Promise((resolve, reject) => {
       const interval = setInterval(() => {

@@ -5,6 +5,7 @@ module.exports = class IrmaNutsAuth {
   constructor({stateMachine, options}) {
     this._stateMachine = stateMachine;
     this._options      = options;
+    this._nutsServer   = new NutsServer(this._options.server);
   }
 
   stateChange({newState}) {
@@ -24,18 +25,16 @@ module.exports = class IrmaNutsAuth {
       session: session
     });
 
-    // If given a session, continue that session
+    // If given an already started session, handle that session
     if ( this._options.session ) {
+      this._nutsServer.handleSession(this._options.session);
       this._stateMachine.transition('loaded', this._options.session.qr_code_info);
       return;
     }
 
     // If given a server and a request, start a new session
-    if ( this._options.server && this._options.request ) {
-      this._nutsServer = new NutsServer(this._options.server);
-      this._stateMachine.transition('initialize');
-      return;
-    }
+    if ( this._options.server && this._options.request )
+      return this._stateMachine.transition('initialize');
   }
 
   _startNewSession() {
