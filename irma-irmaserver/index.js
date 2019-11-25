@@ -10,11 +10,16 @@ module.exports = class IrmaJSBackend {
   stateChange({newState}) {
     switch(newState) {
       case 'Loading':
+        // If session is already started and never completed, finish previous session
+        const prevOptions = localStorage.getItem('irmajs-options');
+        if (prevOptions !== null) {
+          this._options = JSON.parse(prevOptions);
+          this._stateMachine.transition('loaded', this._options.sessionPtr);
+          return this._waitForScanning();
+        }
         return this._startNewSession();
-      case 'ShowingQRCode':
-      case 'ShowingQRCodeInstead':
-        return this._waitForScanning();
       case 'ContinueOn2ndDevice':
+      case 'ContinueInIrmaApp':
         return this._waitForUserAction();
     }
   }
@@ -35,27 +40,36 @@ module.exports = class IrmaJSBackend {
       this._options.sessionPtr = sessionPtr;
       this._options.token = token;
       this._stateMachine.transition('loaded', sessionPtr);
+      this._options.irmaState = {};
+
+      // Store session for recovering a session on mobile devices
+      localStorage.setItem('irmajs-options', JSON.stringify(this._options));
+
+      this._waitForScanning();
     })
     .catch(error => this._handleUnexpectedServerStates(error)) // TODO: is this right..?
   }
 
   _waitForScanning() {
-    this._options.irmaState = {};
     this._irmaServer._setupSession(this._options.sessionPtr, this._options.irmaState, this._options)
     .then(status => {
       this._options.receivedStatus = status;
-      this._stateMachine.transition('codeScanned');  // TODO: Do we always go here?
+      this._stateMachine.transition('appConnected');  // TODO: Do we always go here?
     })
     .catch(error => this._handleUnexpectedServerStates(error)) // TODO: is this right?
   }
 
   _waitForUserAction() {
     this._irmaServer._finishSession(this._options.receivedStatus, this._options.irmaState)
-    .then(result => this._stateMachine.transition('succeed', result))
+    .then(result => {
+      localStorage.removeItem('irmajs-options');
+      this._stateMachine.transition('succeed', result);
+    })
     .catch(error => this._handleUnexpectedServerStates(error)) // TODO: is this right?
   }
 
   _handleUnexpectedServerStates(error) {
+    localStorage.removeItem('irmajs-options');
     switch(error) {
       case 'CANCELLED':
         // This is a conscious choice by a user.

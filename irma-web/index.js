@@ -19,15 +19,19 @@ module.exports = class IrmaWeb {
     this._lastPayload = payload;
     switch(newState) {
       case 'ContinueInIrmaApp':
-        return window.setTimeout(() => this._dom.renderState(newState), 200);
+        return this._dom.renderState(newState); //TODO: Why was here a timeout in the code?
       case 'ShowingQRCode':
       case 'ShowingQRCodeInstead':
-        this._dom.renderState(newState)
+        this._dom.renderState(newState);
         return QRCode.toCanvas(
           document.getElementById('irma-web-qr-canvas'),
           JSON.stringify(payload),
           {width: '230', margin: '1'}
         );
+      case 'ShowingIrmaButton':
+        this._dom.renderState(newState);
+        const url = 'https://irma.app/-/session#' + encodeURIComponent(JSON.stringify(payload));
+        return document.getElementById('irma-web-button-link').setAttribute('href', url);
       default:
         this._dom.renderState(newState)
     }

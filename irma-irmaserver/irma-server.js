@@ -110,28 +110,6 @@ module.exports = class IrmaServer {
         // TODO: this was a quick-fix
         state.options = options;
         state.method = state.options.method;
-        switch (state.method) {
-          case 'url':
-            state.done = true;
-            return QRCode.toDataURL(JSON.stringify(state.qr));
-          case 'mobile':
-            startMobileSession(qr, state.options.userAgent);
-            break;
-          case 'popup':
-            setupPopup(qr, state.options.language);
-            // fallthrough
-          case 'canvas':
-            state.canvas = window.document.getElementById(state.options.element);
-            if (!state.canvas) return Promise.reject('Specified canvas not found in DOM');
-            drawQr(state.canvas, state.qr);
-            break;
-          case 'console':
-            qrcodeterminal.generate(
-              JSON.stringify(state.qr),
-              state.options.qrterminalOptions,
-              state.options.qrterminalDisplay);
-            break;
-        }
 
         if (state.options.returnStatus === SessionStatus.Initialized) {
           state.done = true;
