@@ -15,7 +15,7 @@ module.exports = class IrmaWeb {
     );
   }
 
-  stateChange({newState, payload}) {
+  stateChange({newState, payload, universalLink}) {
     this._lastPayload = payload;
     switch(newState) {
       case 'ContinueInIrmaApp':
@@ -30,8 +30,7 @@ module.exports = class IrmaWeb {
         );
       case 'ShowingIrmaButton':
         this._dom.renderState(newState);
-        const url = 'https://irma.app/-/session#' + encodeURIComponent(JSON.stringify(payload));
-        return document.getElementById('irma-web-button-link').setAttribute('href', url);
+        return document.getElementById('irma-web-button-link').setAttribute('href', universalLink);
       default:
         this._dom.renderState(newState)
     }
