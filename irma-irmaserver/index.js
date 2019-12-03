@@ -11,9 +11,7 @@ module.exports = class IrmaJSBackend {
     switch(newState) {
       case 'Loading':
         // If session is already started and never completed, finish previous session
-        const prevOptions = localStorage.getItem('irmajs-options');
-        if (prevOptions !== null) {
-          this._options = JSON.parse(prevOptions);
+        if (this._options.sessionPtr) {
           this._stateMachine.transition('loaded', this._options.sessionPtr);
           return this._waitForScanning();
         }
@@ -39,13 +37,9 @@ module.exports = class IrmaJSBackend {
     .then(({sessionPtr, token}) => {
       this._options.sessionPtr = sessionPtr;
       this._options.token = token;
-      this._stateMachine.transition('loaded', sessionPtr);
       this._options.irmaState = {};
-
-      // Store session for recovering a session on mobile devices
-      localStorage.setItem('irmajs-options', JSON.stringify(this._options));
-
-      this._waitForScanning();
+      this._stateMachine.transition('loaded', this._options.sessionPtr);
+      return this._waitForScanning();
     })
     .catch(error => this._handleUnexpectedServerStates(error)) // TODO: is this right..?
   }
@@ -62,14 +56,12 @@ module.exports = class IrmaJSBackend {
   _waitForUserAction() {
     this._irmaServer._finishSession(this._options.receivedStatus, this._options.irmaState)
     .then(result => {
-      localStorage.removeItem('irmajs-options');
       this._stateMachine.transition('succeed', result);
     })
     .catch(error => this._handleUnexpectedServerStates(error)) // TODO: is this right?
   }
 
   _handleUnexpectedServerStates(error) {
-    localStorage.removeItem('irmajs-options');
     switch(error) {
       case 'CANCELLED':
         // This is a conscious choice by a user.

@@ -24,7 +24,7 @@ module.exports = class StateMachine {
       oldState:      oldState,
       transition:    transition,
       payload:       payload,
-      universalLink: 'https://irma.app/-/session#' + encodeURIComponent(JSON.stringify(payload)),
+      universalLink: payload ? 'https://irma.app/-/session#' + encodeURIComponent(JSON.stringify(payload)) : null,
     }));
   }
 
